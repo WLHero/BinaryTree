@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>导弹大炮游戏</title>
+</head>
+
+<style type="text/css">
+	#stage {
+		width: 300px;
+		height: 300px;
+		position: relative;
+	}
+	#background {
+		width: 300px;
+		height: 300px;
+		position: absolute;
+		left: 0;
+		top: 0;
+		background: #000;
+	}
+	#cannon {
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		left: 140px;
+		top: 270px;
+		background: blue;
+	}
+	#aline {
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		top: 20px;
+		left: 80px;
+		background: red;
+	}
+	#missile {
+		width: 10px;
+		height: 10px;
+		position: absolute;
+		left: 140px;
+		top: 270px;
+	}
+	#explosion {
+		width: 20px;
+		height: 20px;
+		left: 0;
+		top: 0;
+		position: absolute;
+		background: yellow;
+		display: none;
+	}
+</style>
+<body>
+
+
+<div id="stage">
+	<div id="background"></div> <!-- 背景 -->
+	<div id="cannon"></div> <!-- 大炮 -->
+	<div id="missile"></div> <!-- 导弹 -->
+	<div id="aline"></div> <!-- 外星人 -->
+	<div id="explosion"></div> <!-- 爆炸 -->
+</div>
+<p id="output">请输入X 和 Y坐标（0，300），然后点击fire</p>
+<input type="text" name="" placeholder="X..." id="inputX">
+<input type="text" name="" placeholder="Y..." id="inputY">
+<button>fire</button>
+
+<script type="text/javascript">
+	function BinaryTree () {
+		var Node = function (key) {
+			this.key = key;
+			this.left = null;
+			this.right = null;
+		}
+		var root = null;
+
+		var insertNode = function (node, newNode) {
+			if (newNode.key < node.key) {
+				if (node.left === null) {
+					node.left = newNode;
+				} else {
+					insertNode(node.left, newNode);
+				}
+			} else {
+				if (node.right === null) {
+					node.right = newNode;
+				} else {
+					insertNode(node.right, newNode);
+				}
+			}
+		}
+
+		this.insert = function (key) {
+			var newNode = new Node(key);
+			if (root === null) {
+				root = newNode;
+			} else {
+				insertNode(root, newNode);
+			}
+		}
+
+		
+		var inOrderTraverseNode = function (node, callback) {
+			if (node !== null) {
+				inOrderTraverseNode(node.left, callback);
+				callback(node.key);
+				inOrderTraverseNode(node.right, callback);
+			}
+		}
+		this.inOrderTraverse = function (callback) {
+			inOrderTraverseNode(root, callback);
+		}
+
+		var preOrderTraverseNode = function (node, callback) {
+			if (node !== null) {
+				callback(node.key);
+				preOrderTraverseNode(node.left, callback);
+				preOrderTraverseNode(node.right, callback);
+			}
+		}
+		this.preOrderTraverse = function (callback) {
+			preOrderTraverseNode(root, callback);
+		}
+
+		var postOrderTraverseNode = function (node, callback) {
+			if (node !== null) {
+				postOrderTraverseNode(node.left, callback);
+				postOrderTraverseNode(node.right, callback);
+				callback(node.key);
+			}
+		}
+		this.postOrderTraverse = function (callback) {
+			postOrderTraverseNode(root, callback);
+		}
+
+		var minNode = function (node) {
+			if (node) {
+				while (node && node.left !== null) {
+					node = node.left
+				}
+				return node.key;
+			}
+			return null;
+		}
+		this.min = function () {
+			return minNode(root);
+		}
+
+		var maxNode = function (node) {
+			if (node) {
+				while (node && node.right !== null) {
+					node = node.right
+				}
+				return node.key;
+			}
+			return null;
+		}
+		this.max = function () {
+			return maxNode(root);
+		}
+
+		var searchNode = function (node, key) {
+			if (node == null) {
+				return false;
+			}
+
+			if(key < node.key) {
+				return searchNode(node.left, key);
+			} else if (key > node.key) {
+				return searchNode(node.right, key);
+			} else {
+				return true;
+			}
+
+		}
+		this.search = function (key) {
+			return searchNode(root, key);
+		}
+
+		var findMinNode = function (node) {
+			if (node) {
+				while (node && node.left !== null) {
+					node = node.left
+				}
+				return node;
+			}
+			return null;
+		}
+
+		var removeNode = function (node, key) {
+			if (node == null) {
+				return null;
+			}
+			if (key < node.key) {
+				node.left = removeNode(node.left, key);
+				return node;
+			} else if (key > node.key) {
+				node.right = removeNode(node.right, key);
+				return node;
+			} else {
+				// 删除的节点两边都没有值
+				if (node.left == null && node.right == null) {
+					node = null;
+					return node;
+				}
+				// 删除中间节点 如果只有某一边有值时,就把当前节点替换成左边或者右边的节点
+				if (node.left == null) {
+					node = node.right;
+					return node;
+				} else if (node.right == null) {
+					node = node.left;
+					return node;
+				}
+
+				// 如果删除的节点两边都有，就取它右节点的最小节点的值，替换当前的值，并删除那个最小的节点
+				var aux = findMinNode(node.right);
+				node.key = aux.key;
+				node.right = removeNode(node.right, aux);
+				return node;
+			}
+		}
+		this.remove = function (key) {
+			return removeNode(root, key);
+		}
+
+	}
+
+	var node = [8, 3, 10, 1, 6, 14, 4, 7, 13];
+	var binaryTree = new BinaryTree
+	node.forEach(function(key) {
+		binaryTree.insert(key);
+	})
+
+	// game section
+	var alienY = 20;
+	var guessX = 0;
+	var guessY = 0;
+	var shotRemaning = 0;
+	var shotMade = 0;
+	var gameState = "";
+	var gameWon = false;
+
+	var cannon = document.querySelector("#cannon");
+	var aline = document.querySelector("#aline");
+	var missile = document.querySelector("#missile");
+	var explosion = document.querySelector("#explosion");
+	var inputX = document.querySelector("#inputX");
+	var inputY = document.querySelector("#inputY");
+	var output = document.querySelector("#output");
+	var button = document.querySelector("#button");
+	button.style.cursor = "pointer";
+	button.addEventListener('click', clickHandler, false);
+	window.addEventListener('keydown', keydownHandler, false);
+
+
+	function clickHandler () {
+		validateInput();
+	}
+
+	function keydownHandler () {
+		validateInput();
+	}
+
+	function validateInput() {
+		guessX = parseInt(inputX.value);
+		guessY = parseInt(inputY.value);
+
+		if (isNaN(guessX) || isNaN(guessY)) {
+			output.innerHTML = "请输入坐标";
+		} else if (guessX > 300 || guessY > 300) {
+			output.innerHTML = "坐标不能大于 300";
+		} else {
+			playGame();
+		}
+	}
+
+	function playGame() {
+		shotRemaning = shotRemaning - 1;
+		shotMade = shotMade + 1;
+		gameState = "炮弹：" + "，数量：" + shotRemaning;
+
+		guessX = parseInt(inputX.value);
+		guessY = parseInt(inputY.value);
+		var alineNode = binaryTree.search(guessX);
+		if (alineNode !== null && alineNode.selected == true) {
+			if (guessY > alienY && guessY <= alienY + 20) {
+				gameWon = true;
+				endGame();
+			}
+		} else {
+			output.innerHTML = "没有击中";
+		}
+
+		if (!gameWon) {
+			nodeForAlien[alineNodeSelect].selected = false;
+			alineNodeSelect = Math.floor(Math.random() * 9);
+			nodeForAlien[alineNodeSelect].selected = true;
+			alienX = nodeForAlien[alineNodeSelect].key;
+			alienY += 30;
+		}
+
+		render();
+		
+	}
+
+
+
+
+</script>
+</body>
+</html>
